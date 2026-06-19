@@ -1,6 +1,6 @@
 [versions]
-agp = "8.2.2"
-kotlin = "1.9.22"
+agp = "8.5.1"
+kotlin = "2.1.0"
 junit = "4.13.2"
 mockk = "1.13.9"
 coroutinesTest = "1.7.3"
