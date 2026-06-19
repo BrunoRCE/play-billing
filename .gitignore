@@ -1,0 +1,29 @@
+# Built artifacts
+**/build/
+/build/
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.navigation/
+
+# Gradle
+.gradle/
+/local.properties
+/.gradle/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aar
+*.jks
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
