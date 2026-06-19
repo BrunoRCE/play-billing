@@ -39,7 +39,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.brunorce"
                 artifactId = "playbilling"
-                version = "1.0.0"
+                version = "1.0.2"
             }
         }
     }

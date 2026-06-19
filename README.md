@@ -1,6 +1,6 @@
 # PlayBilling
 
-[![](https://jitpack.io/v/brunorce/PlayBilling.svg)](https://jitpack.io/home/brunorce/PlayBilling)
+[![](https://jitpack.io/v/BrunoRCE/play-billing.svg)](https://jitpack.io/#BrunoRCE/play-billing)
 
 ---
 
@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 #### 2. Add the dependency (build.gradle.kts)
 ```kotlin
 dependencies {
-    implementation("com.github.brunorce:PlayBilling:1.0.0")
+    implementation("com.github.BrunoRCE:play-billing:1.0.2")
 }
 ```
 
@@ -98,7 +98,7 @@ dependencyResolutionManagement {
 #### 2. Agregar la dependencia (build.gradle.kts)
 ```kotlin
 dependencies {
-    implementation("com.github.brunorce:PlayBilling:1.0.0")
+    implementation("com.github.BrunoRCE:play-billing:1.0.2")
 }
 ```
 
@@ -127,4 +127,3 @@ products.firstOrNull()?.let { productDetails ->
     billingWrapper.launchPurchase(productDetails, activity)
 }
 ```
-
