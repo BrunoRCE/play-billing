@@ -41,39 +41,63 @@ dependencies {
 }
 ```
 
-### 🛠️ Basic Usage
+### 🛠️ API Reference & Usage
 
-#### Initialization
+#### 1. Initialization & Connection
 ```kotlin
 val playBilling = PlayBilling.create(context, debugEnabled = true)
+
+// Connect to Google Play
 playBilling.connect()
+
+// Observe connection status
+lifecycleScope.launch {
+    playBilling.isReady.collect { ready ->
+        if (ready) println("Billing service connected")
+    }
+}
 ```
 
-#### Observe Purchases
+#### 2. Observe Purchases
+The `purchases` flow emits the updated list whenever a purchase is made, acknowledged, or refreshed.
 ```kotlin
 lifecycleScope.launch {
     playBilling.purchases.collect { purchases ->
-        // Update your UI or business logic
         purchases.forEach { purchase ->
-            println("Product purchased: ${purchase.products}")
+            if (purchase.isAcknowledged) {
+                // Grant access to content
+            }
         }
     }
 }
 ```
 
-#### Query Products and Launch Purchase
+#### 3. Query and Buy Products
 ```kotlin
-val productIds = listOf("premium_sub_monthly")
-// type: BillingClient.ProductType.SUBS or BillingClient.ProductType.INAPP
-val products = playBilling.getProducts(productIds, BillingClient.ProductType.SUBS)
+// Fetch products (SUBS or INAPP)
+val products = playBilling.getProducts(
+    productIds = listOf("premium_sub_monthly"),
+    type = BillingClient.ProductType.SUBS
+)
 
+// Launch purchase flow
 products.firstOrNull()?.let { product ->
     playBilling.launchPurchase(
         activity = activity,
         productId = product.productId,
-        type = product.type
+        type = product.type,
+        offerToken = null // Optional: specifically for subscriptions
     )
 }
+```
+
+#### 4. Refresh and Cleanup
+```kotlin
+// Manually refresh purchases (e.g., in onResume)
+playBilling.refreshPurchases()
+
+// Clean up when done (usually in ViewModel.onCleared or Activity.onDestroy)
+playBilling.destroy()
 ```
 
 ---
@@ -111,37 +135,61 @@ dependencies {
 }
 ```
 
-### 🛠️ Uso Básico
+### 🛠️ Referencia de API y Uso
 
-#### Inicialización
+#### 1. Inicialización y Conexión
 ```kotlin
 val playBilling = PlayBilling.create(context, debugEnabled = true)
+
+// Conectar a Google Play
 playBilling.connect()
+
+// Observar estado de la conexión
+lifecycleScope.launch {
+    playBilling.isReady.collect { ready ->
+        if (ready) println("Servicio de facturación conectado")
+    }
+}
 ```
 
-#### Observar Compras
+#### 2. Observar Compras
+El flujo `purchases` emite la lista actualizada cada vez que se realiza, confirma o actualiza una compra.
 ```kotlin
 lifecycleScope.launch {
     playBilling.purchases.collect { purchases ->
-        // Actualiza tu UI o lógica de negocio
         purchases.forEach { purchase ->
-            println("Producto comprado: ${purchase.products}")
+            if (purchase.isAcknowledged) {
+                // Otorgar acceso al contenido
+            }
         }
     }
 }
 ```
 
-#### Consultar Productos y Comprar
+#### 3. Consultar y Comprar Productos
 ```kotlin
-val productIds = listOf("premium_sub_monthly")
-// type: BillingClient.ProductType.SUBS o BillingClient.ProductType.INAPP
-val products = playBilling.getProducts(productIds, BillingClient.ProductType.SUBS)
+// Consultar productos (SUBS o INAPP)
+val products = playBilling.getProducts(
+    productIds = listOf("premium_sub_monthly"),
+    type = BillingClient.ProductType.SUBS
+)
 
+// Lanzar flujo de compra
 products.firstOrNull()?.let { product ->
     playBilling.launchPurchase(
         activity = activity,
         productId = product.productId,
-        type = product.type
+        type = product.type,
+        offerToken = null // Opcional: específico para suscripciones
     )
 }
+```
+
+#### 4. Actualizar y Limpiar
+```kotlin
+// Actualizar compras manualmente (ej: en onResume)
+playBilling.refreshPurchases()
+
+// Limpiar al terminar (generalmente en ViewModel.onCleared o Activity.onDestroy)
+playBilling.destroy()
 ```
