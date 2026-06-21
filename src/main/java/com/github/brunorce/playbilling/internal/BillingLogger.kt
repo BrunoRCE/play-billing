@@ -1,8 +1,8 @@
-package com.github.brunorce.playbilling.utils
+package com.github.brunorce.playbilling.internal
 
 import android.util.Log
 
-class BillingLogger(private val enabled: Boolean) {
+internal class BillingLogger(private val enabled: Boolean) {
     private val tag = "PlayBillingWrapper"
 
     fun d(message: String) {

@@ -11,11 +11,11 @@
 <a name="english"></a>
 ## English
 
-`PlayBilling` is a modern and lightweight wrapper for the **Google Play Billing Library (v7+)** designed to simplify the integration of in-app purchases and subscriptions in Android using Kotlin Coroutines and Flow.
+`PlayBilling` is a modern and lightweight wrapper for the **Google Play Billing Library (v8.0.0)** designed to simplify the integration of in-app purchases and subscriptions in Android using Kotlin Coroutines and Flow.
 
 ### ✨ Features
 - ✅ **Coroutine-based:** No more complex callbacks.
-- ✅ **Reactive:** Observe purchase status and connection via `StateFlow`.
+- ✅ **Reactive:** Observe purchase status and connection via `Flow`.
 - ✅ **Error Handling:** Built-in automatic reconnection logic.
 - ✅ **Modern Subscriptions:** Native support for multiple offers and subscription tokens.
 - ✅ **Lightweight:** No unnecessary dependencies, just Kotlin and Billing Library.
@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 #### 2. Add the dependency (build.gradle.kts)
 ```kotlin
 dependencies {
-    implementation("com.github.BrunoRCE:play-billing:1.0.2")
+    implementation("com.github.BrunoRCE:play-billing:2.0.0")
 }
 ```
 
@@ -45,14 +45,18 @@ dependencies {
 
 #### Initialization
 ```kotlin
-val billingWrapper = PlayBillingWrapper(context, debugEnabled = true)
+val playBilling = PlayBilling.create(context, debugEnabled = true)
+playBilling.connect()
 ```
 
 #### Observe Purchases
 ```kotlin
 lifecycleScope.launch {
-    billingWrapper.purchases.collect { purchases ->
+    playBilling.purchases.collect { purchases ->
         // Update your UI or business logic
+        purchases.forEach { purchase ->
+            println("Product purchased: ${purchase.products}")
+        }
     }
 }
 ```
@@ -60,10 +64,15 @@ lifecycleScope.launch {
 #### Query Products and Launch Purchase
 ```kotlin
 val productIds = listOf("premium_sub_monthly")
-val products = billingWrapper.getProducts(BillingClient.ProductType.SUBS, productIds)
+// type: BillingClient.ProductType.SUBS or BillingClient.ProductType.INAPP
+val products = playBilling.getProducts(productIds, BillingClient.ProductType.SUBS)
 
-products.firstOrNull()?.let { productDetails ->
-    billingWrapper.launchPurchase(productDetails, activity)
+products.firstOrNull()?.let { product ->
+    playBilling.launchPurchase(
+        activity = activity,
+        productId = product.productId,
+        type = product.type
+    )
 }
 ```
 
@@ -72,11 +81,11 @@ products.firstOrNull()?.let { productDetails ->
 <a name="español"></a>
 ## Español
 
-`PlayBilling` es un wrapper moderno y ligero sobre la **Google Play Billing Library (v7+)** diseñado para simplificar la integración de compras in-app y suscripciones en Android utilizando Kotlin Coroutines y Flow.
+`PlayBilling` es un wrapper moderno y ligero sobre la **Google Play Billing Library (v8.0.0)** diseñado para simplificar la integración de compras in-app y suscripciones en Android utilizando Kotlin Coroutines y Flow.
 
 ### ✨ Características
 - ✅ **Basado en Coroutines:** Olvídate de los callbacks complejos.
-- ✅ **Reactivo:** Observa el estado de las compras y la conexión mediante `StateFlow`.
+- ✅ **Reactivo:** Observa el estado de las compras y la conexión mediante `Flow`.
 - ✅ **Manejo de Errores:** Lógica de reconexión automática integrada.
 - ✅ **Suscripciones Modernas:** Soporte nativo para múltiples ofertas y tokens de suscripción.
 - ✅ **Ligero:** Sin dependencias innecesarias, solo Kotlin y Billing Library.
@@ -98,7 +107,7 @@ dependencyResolutionManagement {
 #### 2. Agregar la dependencia (build.gradle.kts)
 ```kotlin
 dependencies {
-    implementation("com.github.BrunoRCE:play-billing:1.0.2")
+    implementation("com.github.BrunoRCE:play-billing:2.0.0")
 }
 ```
 
@@ -106,14 +115,18 @@ dependencies {
 
 #### Inicialización
 ```kotlin
-val billingWrapper = PlayBillingWrapper(context, debugEnabled = true)
+val playBilling = PlayBilling.create(context, debugEnabled = true)
+playBilling.connect()
 ```
 
 #### Observar Compras
 ```kotlin
 lifecycleScope.launch {
-    billingWrapper.purchases.collect { purchases ->
+    playBilling.purchases.collect { purchases ->
         // Actualiza tu UI o lógica de negocio
+        purchases.forEach { purchase ->
+            println("Producto comprado: ${purchase.products}")
+        }
     }
 }
 ```
@@ -121,9 +134,14 @@ lifecycleScope.launch {
 #### Consultar Productos y Comprar
 ```kotlin
 val productIds = listOf("premium_sub_monthly")
-val products = billingWrapper.getProducts(BillingClient.ProductType.SUBS, productIds)
+// type: BillingClient.ProductType.SUBS o BillingClient.ProductType.INAPP
+val products = playBilling.getProducts(productIds, BillingClient.ProductType.SUBS)
 
-products.firstOrNull()?.let { productDetails ->
-    billingWrapper.launchPurchase(productDetails, activity)
+products.firstOrNull()?.let { product ->
+    playBilling.launchPurchase(
+        activity = activity,
+        productId = product.productId,
+        type = product.type
+    )
 }
 ```
